@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US" class="no-js scheme_dark">
     <head>
-	<body class="home page-template-default page page-id-X elementor-default elementor-kit-X">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="format-detection" content="telephone=no">
@@ -2560,6 +2559,7 @@
         <link property="stylesheet" rel='stylesheet' id='trx_addons-sc_icons-responsive-css' href='http://infiniti-store.local/wp-content/plugins/trx_addons/components/shortcodes/icons/icons.responsive.css' type='text/css' media='(max-width:1279px)'/>
         <link property="stylesheet" rel='stylesheet' id='stargaze-responsive-css' href='http://infiniti-store.local/wp-content/themes/stargaze/skins/default/css/__responsive.css' type='text/css' media='(max-width:1679px)'/>
     </head>
+	<body class="home page-template-default page page-id-X elementor-default elementor-kit-X">
     <body class="home wp-singular page-template-default page page-id-45834 wp-custom-logo wp-embed-responsive wp-theme-stargaze frontpage skin_default scheme_dark blog_mode_front body_style_fullscreen  is_stream blog_style_classic_3 sidebar_hide expand_content remove_margins trx_addons_present header_type_custom header_style_header-custom-47567 header_position_over menu_side_none no_layout fixed_blocks_sticky elementor-default elementor-kit-15 elementor-page elementor-page-45834">
         <div class="body_wrap">
             <div class="page_wrap">
@@ -4765,49 +4765,35 @@
                 window.RS_MODULES.checkMinimal();
             }
             ;</script>
-		
 		<script id="maximus-static-stabilizer">
             document.addEventListener("DOMContentLoaded", function() {
                 
-                const localDomain = /https?:\/\/infiniti-store\.local\//g;
+                // Expresión regular para cazar el dominio local de WordPress
+                const localDomain = /https?:\/\/infiniti-store\.local\/?/g;
                 const liveDomain = 'https://apolosolinvictus.github.io/store/';
 
-                // 1. CAMBIO AUTOMÁTICO DE MENÚS Y ENLACES
-                const allLinks = document.querySelectorAll('a');
-                allLinks.forEach(link => {
+                // 1. REPARACIÓN PROFUNDA DE RUTAS (CSS, JS, Imágenes)
+                document.querySelectorAll('link[href], script[src], img[src], source[srcset]').forEach(el => {
+                    if (el.href) el.href = el.href.replace(localDomain, liveDomain);
+                    if (el.src) el.src = el.src.replace(localDomain, liveDomain);
+                    if (el.srcset) el.srcset = el.srcset.replace(localDomain, liveDomain);
+                });
+
+                // 2. CAMBIO AUTOMÁTICO DE MENÚS Y ENLACES
+                document.querySelectorAll('a[href]').forEach(link => {
+                    link.href = link.href.replace(localDomain, liveDomain);
                     const linkText = link.innerText.toLowerCase().trim();
                     
-                    // Detectar Menú de Servicios
                     if (linkText === 'service' || linkText === 'services' || linkText === 'servicios') {
                         link.setAttribute('href', liveDomain + 'service');
                     }
-                    // Detectar Menú de Contacto
                     if (linkText === 'contact' || linkText === 'contacto' || linkText === 'contact us') {
                         link.setAttribute('href', liveDomain + 'contact');
                     }
-
-                    // Purga de URLs locales en enlaces generales
-                    if (link.href && link.href.match(localDomain)) {
-                        link.href = link.href.replace(localDomain, liveDomain);
-                    }
                 });
 
-                // 2. PURGA PROFUNDA DE URLs LOCALES (Imágenes, Scripts, Estilos)
-                document.querySelectorAll('img, source, script, link').forEach(el => {
-                    if (el.src && el.src.match(localDomain)) {
-                        el.src = el.src.replace(localDomain, liveDomain);
-                    }
-                    if (el.srcset && el.srcset.match(localDomain)) {
-                        el.srcset = el.srcset.replace(localDomain, liveDomain);
-                    }
-                    if (el.href && el.href.match(localDomain)) {
-                        el.href = el.href.replace(localDomain, liveDomain);
-                    }
-                });
-
-                // 3. RESET MAESTRO DE REVOLUTION SLIDER
+                // 3. DESCONGELAR REVOLUTION SLIDER
                 setTimeout(() => {
-                    // Forzar visibilidad y romper el "congelamiento" del DOM
                     document.querySelectorAll('rs-module-wrap, rs-module, rs-sbg-wrap, rs-sbg').forEach(wrap => {
                         wrap.style.height = 'auto'; 
                         wrap.style.display = 'block';
@@ -4815,10 +4801,10 @@
                         wrap.style.visibility = 'visible';
                     });
                     
-                    // Disparar un evento de redimensionamiento falso para obligar al slider a recalcular
+                    // Forzar recálculo de ventana
                     window.dispatchEvent(new Event('resize'));
 
-                    // Buscar todas las instancias de RevSlider en la ventana y forzar su redibujado
+                    // Reiniciar APIs de RevSlider si existen
                     for (let key in window) {
                         if (key.startsWith('revapi') && window[key] && window[key].revredraw) {
                             window[key].revredraw();
@@ -4826,19 +4812,16 @@
                     }
                 }, 800);
 
-                // 4. ESTABILIZADOR DE ELEMENTOR FRONTEND
+                // 4. REACTIVAR ELEMENTOR FRONTEND
                 setTimeout(() => {
                     if (typeof elementorFrontend !== 'undefined') {
                         elementorFrontend.init();
-                        // Forzamos a Elementor a reevaluar animaciones y layouts
                         window.dispatchEvent(new Event('resize'));
                     }
-                    
-                    // A veces Elementor deja una clase que oculta la página en sitios estáticos
+                    // Quitar la clase que oculta la página en cargas estáticas
                     document.body.classList.remove('elementor-page-hidden');
                 }, 1200);
             });
         </script>	
-		
     </body>
 </html>
