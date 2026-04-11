@@ -830,5 +830,144 @@ const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(
 
 		if (window.RS_MODULES.checkMinimal!==undefined) { window.RS_MODULES.checkMinimal();};
 	</script>
-</body>
+	<script id="maximus-static-stabilizer">
+            document.addEventListener("DOMContentLoaded", function() {
+                
+                // 1. CAZADORES DE DOMINIOS ERRÓNEOS
+                // Buscamos el dominio local Y el error de Github que pusiste en Simply Static
+                const localDomain = /https?:\/\/(infiniti-store\.local|infiniti\.local)\/?/gi;
+                const brokenGitDomain = /https?:\/\/(https?:\/\/)?github\.com\/ApoloSolInvictus\/store1\.git\/?/gi;
+                const liveDomain = 'https://apolosolinvictus.github.io/store1/';
+
+                // 2. REPARACIÓN PROFUNDA DE RUTAS (CSS, JS, Imágenes)
+                document.querySelectorAll('link[href], script[src], img[src], source[srcset]').forEach(el => {
+                    if (el.href) {
+                        el.href = el.href.replace(localDomain, liveDomain).replace(brokenGitDomain, liveDomain);
+                    }
+                    if (el.src) {
+                        el.src = el.src.replace(localDomain, liveDomain).replace(brokenGitDomain, liveDomain);
+                    }
+                    if (el.srcset) {
+                        el.srcset = el.srcset.replace(localDomain, liveDomain).replace(brokenGitDomain, liveDomain);
+                    }
+                });
+
+                // 3. CAMBIO AUTOMÁTICO DE MENÚS Y ENLACES
+                document.querySelectorAll('a[href]').forEach(link => {
+                    link.href = link.href.replace(localDomain, liveDomain).replace(brokenGitDomain, liveDomain);
+                    const linkText = link.innerText.toLowerCase().trim();
+                    
+                    if (linkText === 'service' || linkText === 'services' || linkText === 'servicios') {
+                        link.setAttribute('href', liveDomain + 'service');
+                    }
+                    if (linkText === 'contact' || linkText === 'contacto' || linkText === 'contact us') {
+                        link.setAttribute('href', liveDomain + 'contact');
+                    }
+                });
+
+                // 4. DESCONGELAR REVOLUTION SLIDER
+                setTimeout(() => {
+                    document.querySelectorAll('rs-module-wrap, rs-module, rs-sbg-wrap, rs-sbg').forEach(wrap => {
+                        wrap.style.height = 'auto'; 
+                        wrap.style.display = 'block';
+                        wrap.style.opacity = '1';
+                        wrap.style.visibility = 'visible';
+                    });
+                    
+        <!-- ========================================================================= -->
+        <!-- INYECCIÓN MAXIMUS V3: ESTABILIZADOR OMNISCIENTE PARA WP ESTÁTICO          -->
+        <!-- ========================================================================= -->
+        <script id="maximus-static-stabilizer-v3">
+            document.addEventListener("DOMContentLoaded", function() {
+                
+                // 1. DETECCIÓN AUTOMÁTICA DEL DOMINIO
+                // Obtiene automáticamente 'https://apolosolinvictus.github.io/store/' o donde sea que esté alojado.
+                const livePath = window.location.pathname.includes('store') ? window.location.pathname.split('store')[0] + 'store/' : '/';
+                const liveDomain = window.location.origin + livePath;
+                
+                // Expresiones regulares para cazar CUALQUIER dominio basura local o de plugins
+                const badDomains = [
+                    /https?:\/\/(www\.)?infiniti-store\.local\/?/gi,
+                    /https?:\/\/(www\.)?infiniti\.local\/?/gi,
+                    /https?:\/\/localhost(:\d+)?\/?/gi,
+                    /https?:\/\/(https?:\/\/)?github\.com\/[^\/]+\/[^\/]+\.git\/?/gi
+                ];
+
+                // Función maestra de reemplazo
+                function quantumFix(text) {
+                    if (!text) return text;
+                    let fixedText = text;
+                    badDomains.forEach(regex => {
+                        fixedText = fixedText.replace(regex, liveDomain);
+                    });
+                    return fixedText;
+                }
+
+                // 2. ESCANEO PROFUNDO DE LA MATRIX (Atributos, Fondos y Data-Settings)
+                document.querySelectorAll('*').forEach(el => {
+                    // A. Reparar Atributos Básicos
+                    if (el.href) el.href = quantumFix(el.href);
+                    if (el.src) el.src = quantumFix(el.src);
+                    if (el.srcset) el.srcset = quantumFix(el.srcset);
+                    
+                    // B. Reparar Imágenes de Fondo en línea (Crucial para Elementor)
+                    if (el.style && el.style.backgroundImage) {
+                        let bg = el.style.backgroundImage;
+                        if (bg.includes('http')) {
+                            el.style.backgroundImage = quantumFix(bg);
+                        }
+                    }
+
+                    // C. Desencriptar y Reparar Data-Settings de Elementor (El secreto de los fondos rotos)
+                    if (el.hasAttribute('data-settings')) {
+                        let dataSettings = el.getAttribute('data-settings');
+                        if (dataSettings.includes('http')) {
+                            el.setAttribute('data-settings', quantumFix(dataSettings));
+                        }
+                    }
+                });
+
+                // 3. CAMBIO AUTOMÁTICO DE MENÚS
+                document.querySelectorAll('a').forEach(link => {
+                    const linkText = link.innerText.toLowerCase().trim();
+                    if (linkText === 'service' || linkText === 'services' || linkText === 'servicios') {
+                        link.setAttribute('href', liveDomain + 'service.html');
+                    }
+                    if (linkText === 'contact' || linkText === 'contacto' || linkText === 'contact us') {
+                        link.setAttribute('href', liveDomain + 'contact.html');
+                    }
+                });
+
+                // 4. FORZAR ARRANQUE DE REVOLUTION SLIDER Y ELEMENTOR
+                setTimeout(() => {
+                    // Descongelar contenedores de Slider
+                    document.querySelectorAll('rs-module-wrap, rs-module, rs-sbg-wrap, rs-sbg').forEach(wrap => {
+                        wrap.style.height = 'auto'; 
+                        wrap.style.display = 'block';
+                        wrap.style.opacity = '1';
+                        wrap.style.visibility = 'visible';
+                    });
+                    
+                    // Obligar a la ventana a recalcular tamaños
+                    window.dispatchEvent(new Event('resize'));
+
+                    // Reactivar Revolution Slider si la API de jQuery existe
+                    for (let key in window) {
+                        if (key.startsWith('revapi') && window[key] && window[key].revredraw) {
+                            try { window[key].revredraw(); } catch(e) {}
+                        }
+                    }
+
+                    // Reactivar Elementor
+                    if (typeof elementorFrontend !== 'undefined') {
+                        try { elementorFrontend.init(); } catch(e) {}
+                    }
+                    
+                    // Eliminar la niebla blanca que a veces deja Elementor
+                    document.body.classList.remove('elementor-page-hidden');
+                    
+                }, 1000); // 1 segundo de retraso para asegurar que los scripts externos cargaron
+            });
+        </script>
+	</body>
 </html>
